@@ -174,9 +174,8 @@ app.get('/', (req, res) => {
   const isBehindOto = req.get('otoroshi-proxied-host');
   const isBehindAuth = Object.keys(req.cookies || {}).filter(key => key.indexOf("oto-papps-global-oauth") === 0).length > 0;
   const profile = req.get("Otoroshi-User-Profile");
-  const proto = req.get("Otoroshi-Protocol-In");
   const parsedProfile = !!profile ? jwt.decode(profile) : null;
-  console.log(isBehindOto, isBehindAuth, Object.keys(req.cookies || {}), proto, parsedProfile)
+  // console.log(isBehindOto, isBehindAuth, Object.keys(req.cookies || {}), proto, parsedProfile)
   if (isBehindOto && isBehindAuth && profile) {
     res.status(200).contentType("text/html").send(indexHtml(`Hey ${parsedProfile.user.profile.name} (${parsedProfile.user.email}) !`, "Welcome back, we're happy to see you behind an Otoroshi instance and Authenticated"));
   } else if (isBehindOto && isBehindAuth) {
@@ -191,7 +190,10 @@ app.get('/', (req, res) => {
 app.get('/oto_only', (req, res) => {
   const profile = req.get("Otoroshi-User-Profile");
   const parsedProfile = !!profile ? jwt.decode(profile) : null;
-  res.status(200).contentType("text/html").send(indexHtml("Hey Stranger !", "This app is private, you shouldn't be able to view it !"));
+  const proto = req.get("Otoroshi-Challenge-In");
+  const parsedProto = jwt.decode(proto);
+  console.log(parsedProto)
+  res.status(200).contentType("text/html").send(indexHtml(`Hey ${parsedProfile.user.profile.name} (${parsedProfile.user.email}) !`, "Welcome back, we're happy to see you behind an Otoroshi instance and Authenticated"));
 })
 
 app.listen(port, () => {
