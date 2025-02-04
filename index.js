@@ -178,7 +178,7 @@ app.get('/', (req, res) => {
   const parsedProfile = !!profile ? jwt.decode(profile) : null;
   console.log(isBehindOto, isBehindAuth, Object.keys(req.cookies || {}), proto, parsedProfile)
   if (isBehindOto && isBehindAuth && profile) {
-    res.status(200).contentType("text/html").send(indexHtml(`Hey ${parsedProfile.user.name} !`, "Welcome back, we're happy to see you behind an Otoroshi instance and Authenticated"));
+    res.status(200).contentType("text/html").send(indexHtml(`Hey ${parsedProfile.user.profile.name} (${parsedProfile.user.email}) !`, "Welcome back, we're happy to see you behind an Otoroshi instance and Authenticated"));
   } else if (isBehindOto && isBehindAuth) {
     res.status(200).contentType("text/html").send(indexHtml(`Hey Stranger !`, "We're happy to see you behind an Otoroshi instance and Authenticated"));
   } else  if (isBehindOto) {
