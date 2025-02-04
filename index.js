@@ -202,6 +202,7 @@ app.get('/oto_only', (req, res) => {
     console.log(parsedProto)
     res.status(200).set('Otoroshi-Challenge-Out', tokenOut).contentType("text/html").send(indexHtml(`Hey ${parsedProfile.user.profile.name} (${parsedProfile.user.email}) !`, "Welcome back, we're happy to see you behind an Otoroshi instance and Authenticated"));
   } catch(e) {
+    console.log(e)
     res.status(500).send({ error: 'you cannot access this app without otoroshi' });
   }
 })
