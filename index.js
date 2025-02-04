@@ -158,7 +158,7 @@ function indexHtml(title, paragraph) {
         <p class="lead">
           <a href="https://maif.github.io/otoroshi/manual/entities/auth-modules.html" target="_blank" class="btn btn-lg btn-light fw-bold border-white bg-white">Learn more</a>
         </p>
-        <div style="display: flex; flex-direction: column; margin-top: 50px;">
+        <div style="display: flex; flex-direction: column; margin-top: 200px;">
           <a class="text-white" href="https://app-59d810c1-e7cd-48fa-a6ab-a96f7d5e7191.cleverapps.io/">app direct access</a>
           <a class="text-white" href="https://app-59d810c1-e7cd-48fa-a6ab-a96f7d5e7191.cleverapps.io/oto_only">app direct access /oto_only</a>
           <a class="text-white" href="https://demo-webauth.otoroshidemo.ovh">app proxy access</a>
