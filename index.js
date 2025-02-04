@@ -176,7 +176,13 @@ app.get('/', (req, res) => {
   const profile = req.get("Otoroshi-User-Profile");
   const proto = req.get("Otoroshi-Protocol-In");
   const parsedProfile = !!profile ? jwt.decode(profile) : null;
-  console.log(isBehindOto, isBehindAuth, req.cookies, proto, parsedProfile)
+  console.log(isBehindOto, isBehindAuth, Object.keys(req.cookies || {}), proto, parsedProfile)
+  res.status(200).contentType("text/html").send(indexHtml("Hey Stranger !", "This app is private, you shouldn't be able to view it !"));
+})
+
+app.get('/oto_only', (req, res) => {
+  const profile = req.get("Otoroshi-User-Profile");
+  const parsedProfile = !!profile ? jwt.decode(profile) : null;
   res.status(200).contentType("text/html").send(indexHtml("Hey Stranger !", "This app is private, you shouldn't be able to view it !"));
 })
 
