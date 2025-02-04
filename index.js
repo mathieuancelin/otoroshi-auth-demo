@@ -172,8 +172,9 @@ app.get('/', (req, res) => {
   const isBehindOto = req.get('otoroshi-proxied-host');
   const isBehindAuth = Object.keys(req.cookies || {}).filter(key => key.indexOf("oto-papps-global-oauth")).length > 0;
   const profile = req.get("Otoroshi-User-Profile");
+  const proto = req.get("Otoroshi-Protocol-In");
   const parsedProfile = !!profile ? jwt.decode(profile) : null;
-  console.log(isBehindOto, isBehindAuth, parsedProfile)
+  console.log(isBehindOto, isBehindAuth, req.cookies, proto, parsedProfile)
   res.status(200).contentType("text/html").send(indexHtml("Hey Stranger !", "This app is private, you shouldn't be able to view it !"));
 })
 
