@@ -159,6 +159,11 @@ function indexHtml(title, paragraph) {
         <p class="lead">
           <a href="https://maif.github.io/otoroshi/manual/entities/auth-modules.html" target="_blank" class="btn btn-lg btn-light fw-bold border-white bg-white">Learn more</a>
         </p>
+        <p>
+          <a href="https://app-59d810c1-e7cd-48fa-a6ab-a96f7d5e7191.cleverapps.io/">origin</a>
+          <a href="https://app-59d810c1-e7cd-48fa-a6ab-a96f7d5e7191.cleverapps.io/oto_only">origin oto_only</a>
+          <a href="https://demo-webauth.otoroshidemo.ovh/oto_only">oto_only</a>
+        </>
       </main>
       <footer class="mt-auto text-white-50">
         <p>Auth. Demo for <a class="text-white" target="_blank" href="https://www.otoroshi.io">Otoroshi</a> by <a target="_blank" class="text-white" href="https://www.cloud-apim.com">Cloud APIM</a></p>
