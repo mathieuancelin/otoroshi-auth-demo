@@ -170,6 +170,8 @@ function indexHtml(title, paragraph) {
   `;
 }
 
+const tokenKey = "secret";
+
 app.get('/', (req, res) => {
   const isBehindOto = req.get('otoroshi-proxied-host');
   const isBehindAuth = Object.keys(req.cookies || {}).filter(key => key.indexOf("oto-papps-global-oauth") === 0).length > 0;
@@ -188,16 +190,20 @@ app.get('/', (req, res) => {
 })
 
 app.get('/oto_only', (req, res) => {
-  const profile = req.get("Otoroshi-User-Profile");
-  const parsedProfile = !!profile ? jwt.decode(profile) : null;
-  const proto = req.get("Otoroshi-Challenge-In");
-  const parsedProto = jwt.decode(proto);
-  const state = parsedProto.state;
-  const ttl = 10 // by default its 30 seconds in the UI
-  const now = Math.floor(Date.now() / 1000)
-  const tokenOut = jwt.sign({ 'state-resp': state, iat: now, nbf: now, exp: now + ttl, aud: 'Otoroshi' }, { algorithm: 'HS512' });
-  console.log(parsedProto)
-  res.status(200).set('Otoroshi-Challenge-Out', tokenOut).contentType("text/html").send(indexHtml(`Hey ${parsedProfile.user.profile.name} (${parsedProfile.user.email}) !`, "Welcome back, we're happy to see you behind an Otoroshi instance and Authenticated"));
+  try {
+    const profile = req.get("Otoroshi-User-Profile");
+    const parsedProfile = !!profile ? jwt.decode(profile) : null;
+    const proto = req.get("Otoroshi-Challenge-In");
+    const parsedProto = jwt.verify(proto, tokenKey, { algorithm: 'HS512' });
+    const state = parsedProto.state;
+    const ttl = 10 // by default its 30 seconds in the UI
+    const now = Math.floor(Date.now() / 1000)
+    const tokenOut = jwt.sign({ 'state-resp': state, iat: now, nbf: now, exp: now + ttl, aud: 'Otoroshi' }, tokenKey, { algorithm: 'HS512' });
+    console.log(parsedProto)
+    res.status(200).set('Otoroshi-Challenge-Out', tokenOut).contentType("text/html").send(indexHtml(`Hey ${parsedProfile.user.profile.name} (${parsedProfile.user.email}) !`, "Welcome back, we're happy to see you behind an Otoroshi instance and Authenticated"));
+  } catch(e) {
+    res.status(500).send({ error: 'you cannot access this app without otoroshi' });
+  }
 })
 
 app.listen(port, () => {
