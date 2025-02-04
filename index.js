@@ -192,8 +192,12 @@ app.get('/oto_only', (req, res) => {
   const parsedProfile = !!profile ? jwt.decode(profile) : null;
   const proto = req.get("Otoroshi-Challenge-In");
   const parsedProto = jwt.decode(proto);
+  const state = parsedProto.state;
+  const ttl = 10 // by default its 30 seconds in the UI
+  const now = Math.floor(Date.now() / 1000)
+  const tokenOut = jwt.sign({ 'state-resp': state, iat: now, nbf: now, exp: now + ttl, aud: 'Otoroshi' }, { algorithm: 'HS512' });
   console.log(parsedProto)
-  res.status(200).contentType("text/html").send(indexHtml(`Hey ${parsedProfile.user.profile.name} (${parsedProfile.user.email}) !`, "Welcome back, we're happy to see you behind an Otoroshi instance and Authenticated"));
+  res.status(200).set('Otoroshi-Challenge-Out', tokenOut).contentType("text/html").send(indexHtml(`Hey ${parsedProfile.user.profile.name} (${parsedProfile.user.email}) !`, "Welcome back, we're happy to see you behind an Otoroshi instance and Authenticated"));
 })
 
 app.listen(port, () => {
